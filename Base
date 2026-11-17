@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Provas Carmak</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
+<style>
+:root{
+  --verde:#95c95a; --verde-claro:#e3f2b9; --verde-escuro:#2a6c46; --verde-medio:#5fa33a;
+  --fundo:#141816; --texto:#252b33; --cinza:#e4e5e6; --vermelho:#b3261e;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%}
+body{
+  font-family:'Roboto',Arial,sans-serif;color:var(--texto);
+  background:
+    repeating-linear-gradient(135deg,rgba(149,201,90,.05) 0 2px,transparent 2px 46px),
+    radial-gradient(ellipse at 15% 0%,rgba(42,108,70,.45),transparent 55%),
+    radial-gradient(ellipse at 90% 100%,rgba(42,108,70,.35),transparent 50%),
+    var(--fundo);
+  background-attachment:fixed;
+}
+header{display:flex;align-items:center;justify-content:center;padding:18px 16px 8px;position:relative}
+.logo{height:64px;width:auto;display:block}
+#btnMenu{
+  position:fixed;top:14px;left:14px;z-index:30;width:46px;height:46px;border-radius:12px;border:none;cursor:pointer;
+  background:var(--verde);color:var(--verde-escuro);font-size:24px;font-weight:700;box-shadow:0 2px 10px rgba(0,0,0,.4)
+}
+#btnMenu:hover{background:var(--verde-claro)}
+#menu{
+  position:fixed;top:0;left:0;bottom:0;width:240px;z-index:25;background:rgba(20,24,22,.97);
+  border-right:3px solid var(--verde);padding:74px 14px 14px;transform:translateX(-100%);transition:transform .25s
+}
+#menu.aberto{transform:none}
+#menu button{
+  display:block;width:100%;text-align:left;margin-bottom:8px;padding:13px 16px;border:none;border-radius:10px;cursor:pointer;
+  font:500 16px 'Roboto',Arial,sans-serif;background:transparent;color:#dfe9d3
+}
+#menu button:hover{background:rgba(149,201,90,.18)}
+#menu button.ativo{background:var(--verde);color:var(--verde-escuro);font-weight:700}
+main{max-width:1100px;margin:0 auto;padding:10px 16px 50px}
+.painel{background:var(--cinza);border-radius:22px;overflow:hidden;box-shadow:0 8px 30px rgba(0,0,0,.45);margin-bottom:22px}
+.painel>h2{background:var(--verde-claro);text-align:center;font-size:26px;padding:28px 16px;color:var(--texto)}
+.painel>.corpo{padding:22px 24px 26px}
+.painel h3{font-size:17px;margin-bottom:12px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+.kpi{background:#fff;border-radius:14px;padding:18px;border-left:7px solid var(--verde)}
+.kpi small{display:block;font-size:13px;color:#59616b;margin-bottom:6px}
+.kpi b{font-size:34px;color:var(--verde-escuro)}
+.kpi.reprov{border-left-color:var(--vermelho)} .kpi.reprov b{color:var(--vermelho)}
+.grupo{margin-top:22px}
+.grade{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
+.card{background:#fff;border-radius:12px;padding:14px;border-top:5px solid var(--verde-escuro)}
+.card span{font-size:14px;font-weight:500;display:block;margin-bottom:6px}
+.card b{font-size:26px;color:var(--verde-escuro)} .card em{display:block;font-style:normal;font-size:12px;color:#59616b;margin-top:3px}
+label{font-weight:700;font-size:14px;display:block;margin-bottom:5px}
+input,select{
+  width:100%;padding:10px 12px;border:1px solid #c3c7cc;border-radius:10px;background:#fff;font:15px 'Roboto',Arial,sans-serif;color:var(--texto)
+}
+input:focus,select:focus{outline:2px solid var(--verde);border-color:var(--verde)}
+.filtros{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:14px}
+.btn{background:var(--verde-escuro);color:#fff;border:none;border-radius:10px;padding:11px 20px;font:700 15px 'Roboto',Arial,sans-serif;cursor:pointer}
+.btn:hover{background:var(--verde-medio)}
+.btn.sec{background:#fff;color:var(--verde-escuro);border:2px solid var(--verde-escuro)}
+.dica{font-size:12px;color:#59616b;margin-top:4px}
+.chart{background:#fff;border-radius:14px;padding:10px;overflow-x:auto}
+.chart svg{width:100%;height:auto;min-width:560px;display:block}
+table{width:100%;border-collapse:collapse;background:#fff;border-radius:12px;overflow:hidden;font-size:14px}
+th{background:var(--verde-escuro);color:#fff;text-align:left;padding:10px 12px}
+td{padding:9px 12px;border-bottom:1px solid #e3e5e8}
+.tw{overflow-x:auto;border-radius:12px}
+.ok{color:var(--verde-escuro);font-weight:700} .no{color:var(--vermelho);font-weight:700}
+.vazio{padding:22px;text-align:center;color:#59616b}
+.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:16px}
+.msg{margin-top:12px;font-weight:500}
+.colab{background:#fff;border-radius:12px;margin-bottom:10px;padding:12px 14px;border-left:6px solid var(--verde)}
+.colab summary{cursor:pointer;font-weight:700;display:flex;justify-content:space-between;gap:10px}
+.colab summary span{font-weight:400;color:#59616b;font-size:13px}
+.colab table{margin-top:10px;font-size:13px}
+.x{background:none;border:none;color:var(--vermelho);cursor:pointer;font-size:13px;text-decoration:underline}
+.login{max-width:380px;margin:0 auto}
+.login .campo{margin-bottom:14px}
+textarea{width:100%;height:110px;border:1px solid #c3c7cc;border-radius:10px;padding:10px;font:12px monospace}
+.pagina{display:none} .pagina.ativa{display:block}
+@media(max-width:600px){.painel>h2{font-size:20px;padding:22px 12px}.logo{height:48px;margin-left:44px}}
+</style>
+</head>
+<body>
+
+<button id="btnMenu" aria-label="Abrir menu">☰</button>
+<nav id="menu">
+  <button data-aba="inicio" class="ativo">Início</button>
+  <button data-aba="graficos">Gráficos</button>
+  <button data-aba="admin">Administração</button>
+</nav>
+
+<header>
+  <div id="logoBox"></div>
+</header>
+
+<main>
+
+<!-- INÍCIO -->
+<section id="inicio" class="pagina ativa">
+  <div class="painel">
+    <h2>Resultados das Provas</h2>
+    <div class="corpo">
+      <div class="kpis">
+        <div class="kpi"><small>Média geral das notas</small><b id="kMedia">–</b></div>
+        <div class="kpi"><small>Aprovadas (nota ≥ 7,0)</small><b id="kAprov">0</b></div>
+        <div class="kpi reprov"><small>Reprovadas (nota &lt; 7,0)</small><b id="kReprov">0</b></div>
+      </div>
+      <div id="gruposTipos"></div>
+    </div>
+  </div>
+</section>
+
+<!-- GRÁFICOS -->
+<section id="graficos" class="pagina">
+  <div class="painel">
+    <h2>Média das Notas por Tipo de Prova</h2>
+    <div class="corpo"><div class="chart" id="gArea"></div></div>
+  </div>
+
+  <div class="painel">
+    <h2>Quantidade de Provas Realizadas</h2>
+    <div class="corpo">
+      <div class="filtros">
+        <div><label for="cAno">Ano</label><select id="cAno"></select></div>
+        <div><label for="cMes">Mês</label><select id="cMes"></select></div>
+      </div>
+      <div class="chart" id="gCol"></div>
+    </div>
+  </div>
+
+  <div class="painel">
+    <h2>Lista de Provas</h2>
+    <div class="corpo">
+      <div class="filtros">
+        <div><label for="lBusca">Buscar nome</label><input id="lBusca" type="search" placeholder="Digite um nome..."></div>
+        <div><label for="lTipo">Tipo de prova</label><select id="lTipo"></select></div>
+        <div><label for="lAno">Ano</label><select id="lAno"></select></div>
+        <div><label for="lMes">Mês</label><select id="lMes"></select></div>
+      </div>
+      <div class="tw"><table><thead><tr><th>Nome</th><th>Nota</th><th>Tipo de prova</th><th>Data</th></tr></thead><tbody id="lCorpo"></tbody></table></div>
+    </div>
+  </div>
+</section>
+
+<!-- ADMINISTRAÇÃO -->
+<section id="admin" class="pagina">
+  <div id="adminLogin" class="painel">
+    <h2>Administração</h2>
+    <div class="corpo">
+      <form class="login" id="fLogin" autocomplete="off">
+        <div class="campo"><label for="lgUser">Usuário</label><input id="lgUser" type="text"></div>
+        <div class="campo"><label for="lgPass">Senha</label><input id="lgPass" type="password"></div>
+        <button class="btn" type="submit">Entrar</button>
+        <p class="msg no" id="lgMsg"></p>
+      </form>
+    </div>
+  </div>
+
+  <div id="adminArea" style="display:none">
+    <div class="painel">
+      <h2>Registrar Prova Corrigida</h2>
+      <div class="corpo">
+        <form id="fProva" autocomplete="off">
+          <div class="form-grid">
+            <div><label for="pNome">Nome do colaborador</label><input id="pNome" type="text" required></div>
+            <div><label for="pTipo">Tipo de prova</label><select id="pTipo" required></select></div>
+            <div><label for="pData">Data da prova</label><input id="pData" type="text" placeholder="dd/mm/aaaa" maxlength="10" inputmode="numeric" required></div>
+            <div><label for="pNota">Nota</label><input id="pNota" type="text" placeholder="XX,X" maxlength="4" inputmode="decimal" required><div class="dica">Ex.: 8,5 ou 10,0</div></div>
+            <div><label for="pPdf">PDF da prova</label><input id="pPdf" type="file" accept="application/pdf"></div>
+          </div>
+          <button class="btn" type="submit">Registrar prova</button>
+          <button class="btn sec" type="button" id="bSair">Sair</button>
+          <p class="msg" id="pMsg"></p>
+        </form>
+      </div>
+    </div>
+
+    <div class="painel">
+      <h2>Colaboradores Registrados</h2>
+      <div class="corpo">
+        <div style="margin-bottom:14px"><label for="aBusca">Buscar colaborador</label><input id="aBusca" type="search" placeholder="Digite um nome..."></div>
+        <div id="aLista"></div>
+      </div>
+    </div>
+
+    <div class="painel">
+      <h2>Dados do Site</h2>
+      <div class="corpo">
+        <p class="dica" style="font-size:13px;margin-bottom:10px">Use para levar os dados para outro navegador/computador ou deixá-los embutidos no site (veja a explicação no topo do código).</p>
+        <button class="btn sec" type="button" id="bExp">Mostrar dados (copiar)</button>
+        <button class="btn sec" type="button" id="bImp">Importar dados colados</button>
+        <textarea id="dadosTxt" style="margin-top:12px" placeholder="Os dados aparecem aqui. Para importar, cole o conteúdo e clique em Importar."></textarea>
+        <p class="msg" id="dMsg"></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<script>
+/* ====================== CONFIGURAÇÕES ======================
+ LOGO_SRC: para usar a logo original, cole aqui o endereço (URL) da imagem
+   ou um texto base64 (data:image/png;base64,...). Vazio = logo recriada em SVG.
+ DADOS_EMBUTIDOS: para TODOS os visitantes verem as mesmas provas, clique em
+   Administração > Dados do Site > "Mostrar dados", copie o conteúdo e cole
+   entre os colchetes abaixo, depois republique o site no Google Sites.
+   Sem isso, os dados ficam salvos apenas no navegador de quem os registrou.
+=============================================================== */
+const LOGO_SRC = "";
+const DADOS_EMBUTIDOS = [];
+const ADMIN_USER = "Moacir Melchior";
+const ADMIN_PASS = "_MelchiorGoedert";
+
+const TIPOS = ["Técnico Elétrica 1","Técnico Elétrica 2","Técnico Elétrica 3",
+  "Técnico Combustão 1","Técnico Combustão 2","Técnico Combustão 3",
+  "Auxiliar Mecânico 1","Auxiliar Mecânico 2","Auxiliar Mecânico 3"];
+const GRUPOS = [["Técnico Elétrica",0],["Técnico Combustão",3],["Auxiliar Mecânico",6]];
+const MESES = ["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
+const NOTA_MIN = 7;
+const CHAVE = "carmak_provas_v1";
+
+/* ---------- armazenamento (com reserva em memória) ---------- */
+let memoria = null;
+function carregar(){
+  try{
+    const t = localStorage.getItem(CHAVE);
+    if(t) return JSON.parse(t);
+  }catch(e){ if(memoria) return memoria; }
+  return memoria || JSON.parse(JSON.stringify(DADOS_EMBUTIDOS));
+}
+function salvar(lista){
+  memoria = lista;
+  try{ localStorage.setItem(CHAVE, JSON.stringify(lista)); }catch(e){}
+}
+let provas = carregar();
+
+/* ---------- utilidades ---------- */
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt = n => n.toFixed(1).replace('.',',');
+const media = arr => arr.length ? arr.reduce((a,b)=>a+b,0)/arr.length : null;
+const norm = s => s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
+const anoDe = p => +p.data.slice(0,4), mesDe = p => +p.data.slice(5,7);
+const dataBR = iso => iso.slice(8,10)+'/'+iso.slice(5,7)+'/'+iso.slice(0,4);
+
+/* ---------- logo ---------- */
+function logoSVG(){
+  return `<svg class="logo" viewBox="0 0 350 104" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Carmak">
+  <ellipse cx="176" cy="50" rx="66" ry="46" fill="#95c95a" transform="translate(6,4)"/>
+  <ellipse cx="176" cy="50" rx="66" ry="46" fill="#2a6c46"/>
+  <g font-family="'Arial Black',Impact,Arial,sans-serif" font-weight="900" paint-order="stroke" stroke-linejoin="round">
+    <text x="4" y="78" font-size="58" fill="#95c95a" stroke="#2a6c46" stroke-width="11" textLength="132" lengthAdjust="spacingAndGlyphs">CAR</text>
+    <text x="236" y="78" font-size="58" fill="#95c95a" stroke="#2a6c46" stroke-width="11" textLength="104" lengthAdjust="spacingAndGlyphs">AK</text>
+    <text x="176" y="82" font-size="94" fill="#95c95a" text-anchor="middle" stroke="#2a6c46" stroke-width="4" textLength="82" lengthAdjust="spacingAndGlyphs">M</text>
+  </g></svg>`;
+}
+$('logoBox').innerHTML = LOGO_SRC ? `<img class="logo" src="${esc(LOGO_SRC)}" alt="Carmak">` : logoSVG();
+
+/* ---------- menu lateral ---------- */
+const menu = $('menu');
+$('btnMenu').onclick = () => menu.classList.toggle('aberto');
+menu.querySelectorAll('button').forEach(b => b.onclick = () => {
+  irPara(b.dataset.aba); menu.classList.remove('aberto');
+});
+document.addEventListener('click', e => {
+  if(!menu.contains(e.target) && e.target !== $('btnMenu')) menu.classList.remove('aberto');
+});
+function irPara(aba){
+  document.querySelectorAll('.pagina').forEach(p => p.classList.toggle('ativa', p.id === aba));
+  menu.querySelectorAll('button').forEach(b => b.classList.toggle('ativo', b.dataset.aba === aba));
+  window.scrollTo(0,0);
+  renderTudo();
+}
+
+/* ---------- início ---------- */
+function renderInicio(){
+  const notas = provas.map(p=>p.nota);
+  $('kMedia').textContent = notas.length ? fmt(media(notas)) : '–';
+  $('kAprov').textContent = notas.filter(n=>n>=NOTA_MIN).length;
+  $('kReprov').textContent = notas.filter(n=>n<NOTA_MIN).length;
+  $('gruposTipos').innerHTML = GRUPOS.map(([nome,ini])=>`
+    <div class="grupo"><h3>${nome}</h3><div class="grade">
+    ${[0,1,2].map(i=>{
+      const t = TIPOS[ini+i], ns = provas.filter(p=>p.tipo===t).map(p=>p.nota), m = media(ns);
+      return `<div class="card"><span>${t}</span><b>${m===null?'–':fmt(m)}</b><em>${ns.length} prova${ns.length===1?'':'s'}</em></div>`;
+    }).join('')}
+    </div></div>`).join('');
+}
+
+/* ---------- gráficos 3D (SVG, sem bibliotecas externas) ---------- */
+const COR = {frente:'#95c95a', topo:'#c9e79a', lado:'#2a6c46'};
+function rotulo(t){ return t.replace('Técnico ','Téc. ').replace('Auxiliar ','Aux. '); }
+
+function graficoArea(){
+  const W=900,H=420,L=60,R=40,T=30,B=95,dx=26,dy=-16;
+  const pw=W-L-R-dx, ph=H-T-B+dy*-1, base=H-B;
+  const med = TIPOS.map(t=>media(provas.filter(p=>p.tipo===t).map(p=>p.nota)));
+  const x = i => L + pw*(i/(TIPOS.length-1));
+  const y = v => base - (v/10)*(base-T-Math.abs(dy)-6);
+  let s = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" font-family="Roboto,Arial">`;
+  for(let v=0;v<=10;v+=2){
+    s += `<line x1="${L}" x2="${W-R}" y1="${y(v)}" y2="${y(v)}" stroke="#d8dbd5" /><text x="${L-10}" y="${y(v)+4}" font-size="12" text-anchor="end" fill="#555">${v}</text>`;
+  }
+  const pts = med.map((m,i)=>[x(i), y(m===null?0:m)]);
+  // parede de trás
+  const back = pts.map(([a,b])=>[a+dx,b+dy]);
+  s += `<polygon points="${back.map(p=>p.join(',')).join(' ')} ${back[back.length-1][0]},${base+dy} ${back[0][0]},${base+dy}" fill="#6fae3e" opacity=".55"/>`;
+  // topo (faixa entre frente e trás)
+  for(let i=0;i<pts.length-1;i++){
+    s += `<polygon points="${pts[i]} ${pts[i+1]} ${back[i+1]} ${back[i]}" fill="${COR.topo}" stroke="#fff" stroke-width=".6"/>`;
+  }
+  // lateral direita
+  const u = pts.length-1;
+  s += `<polygon points="${pts[u]} ${back[u]} ${back[u][0]},${base+dy} ${pts[u][0]},${base}" fill="${COR.lado}"/>`;
+  // frente
+  s += `<polygon points="${pts.map(p=>p.join(',')).join(' ')} ${pts[u][0]},${base} ${pts[0][0]},${base}" fill="${COR.frente}" stroke="${COR.lado}" stroke-width="2"/>`;
+  pts.forEach(([a,b],i)=>{
+    s += `<circle cx="${a}" cy="${b}" r="4.5" fill="${COR.lado}"/>`;
+    s += `<text x="${a}" y="${b-10}" font-size="13" font-weight="700" text-anchor="middle" fill="${COR.lado}">${med[i]===null?'–':fmt(med[i])}</text>`;
+    s += `<text transform="translate(${a},${base+18}) rotate(35)" font-size="12" fill="#333">${esc(rotulo(TIPOS[i]))}</text>`;
+  });
+  s += `<line x1="${L}" x2="${W-R}" y1="${base}" y2="${base}" stroke="${COR.lado}" stroke-width="2"/></svg>`;
+  $('gArea').innerHTML = s;
+}
+
+function graficoColuna(){
+  const ano=$('cAno').value, mes=$('cMes').value;
+  const f = provas.filter(p=>(ano==='todos'||anoDe(p)==ano)&&(mes==='todos'||mesDe(p)==mes));
+  const cont = TIPOS.map(t=>f.filter(p=>p.tipo===t).length);
+  const max = Math.max(5,...cont), topo = Math.ceil(max/5)*5;
+  const W=900,H=420,L=60,R=30,T=30,B=95,dx=14,dy=-9;
+  const base=H-B, alt=base-T-12, slot=(W-L-R)/TIPOS.length, bw=slot*.55;
+  const y = v => base - (v/topo)*alt;
+  let s = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" font-family="Roboto,Arial">`;
+  for(let k=0;k<=5;k++){
+    const v=topo*k/5;
+    s += `<line x1="${L}" x2="${W-R}" y1="${y(v)}" y2="${y(v)}" stroke="#d8dbd5"/><text x="${L-10}" y="${y(v)+4}" font-size="12" text-anchor="end" fill="#555">${Math.round(v)}</text>`;
+  }
+  cont.forEach((c,i)=>{
+    const x0 = L + slot*i + (slot-bw)/2, x1 = x0+bw, yt = y(c);
+    if(c>0){
+      s += `<polygon points="${x1},${base} ${x1+dx},${base+dy} ${x1+dx},${yt+dy} ${x1},${yt}" fill="${COR.lado}"/>`;
+      s += `<polygon points="${x0},${yt} ${x1},${yt} ${x1+dx},${yt+dy} ${x0+dx},${yt+dy}" fill="${COR.topo}"/>`;
+      s += `<rect x="${x0}" y="${yt}" width="${bw}" height="${base-yt}" fill="${COR.frente}" stroke="${COR.lado}" stroke-width="1.5"/>`;
+    }
+    s += `<text x="${x0+bw/2+dx/2}" y="${yt+dy-8}" font-size="14" font-weight="700" text-anchor="middle" fill="${COR.lado}">${c}</text>`;
+    s += `<text transform="translate(${x0+bw/2},${base+20}) rotate(35)" font-size="12" fill="#333">${esc(rotulo(TIPOS[i]))}</text>`;
+  });
+  s += `<line x1="${L}" x2="${W-R}" y1="${base}" y2="${base}" stroke="${COR.lado}" stroke-width="2"/></svg>`;
+  $('gCol').innerHTML = s;
+}
+
+/* ---------- filtros ---------- */
+function anosDisponiveis(){ return [...new Set(provas.map(anoDe))].sort((a,b)=>b-a); }
+function preencherSelect(sel, opcoes, valorTodos){
+  const atual = sel.value;
+  sel.innerHTML = `<option value="todos">${valorTodos}</option>` + opcoes.map(o=>`<option value="${o[0]}">${esc(o[1])}</option>`).join('');
+  if([...sel.options].some(o=>o.value===atual)) sel.value = atual;
+}
+function renderFiltros(){
+  const anos = anosDisponiveis().map(a=>[a,a]);
+  const meses = MESES.map((m,i)=>[i+1,m]);
+  preencherSelect($('cAno'),anos,'Todos os anos'); preencherSelect($('cMes'),meses,'Todos os meses');
+  preencherSelect($('lAno'),anos,'Todos os anos'); preencherSelect($('lMes'),meses,'Todos os meses');
+  preencherSelect($('lTipo'),TIPOS.map(t=>[t,t]),'Todos os tipos');
+}
+
+/* ---------- lista de provas ---------- */
+function renderLista(){
+  const q=norm($('lBusca').value), tp=$('lTipo').value, an=$('lAno').value, me=$('lMes').value;
+  const f = provas.filter(p=>(!q||norm(p.nome).includes(q))&&(tp==='todos'||p.tipo===tp)&&(an==='todos'||anoDe(p)==an)&&(me==='todos'||mesDe(p)==me))
+    .sort((a,b)=>b.data.localeCompare(a.data));
+  $('lCorpo').innerHTML = f.length ? f.map(p=>`<tr><td>${esc(p.nome)}</td><td class="${p.nota>=NOTA_MIN?'ok':'no'}">${fmt(p.nota)}</td><td>${esc(p.tipo)}</td><td>${dataBR(p.data)}</td></tr>`).join('')
+    : `<tr><td colspan="4" class="vazio">Nenhuma prova encontrada.</td></tr>`;
+}
+
+/* ---------- administração ---------- */
+let logado = false;
+function mostrarAdmin(){
+  $('adminLogin').style.display = logado?'none':'block';
+  $('adminArea').style.display = logado?'block':'none';
+}
+$('fLogin').onsubmit = e => {
+  e.preventDefault();
+  if($('lgUser').value.trim()===ADMIN_USER && $('lgPass').value===ADMIN_PASS){
+    logado=true; $('lgMsg').textContent=''; $('lgPass').value=''; mostrarAdmin(); renderAdminLista();
+  } else $('lgMsg').textContent='Usuário ou senha incorretos.';
+};
+$('bSair').onclick = () => { logado=false; mostrarAdmin(); };
+$('pTipo').innerHTML = `<option value="">Selecione...</option>` + TIPOS.map(t=>`<option>${t}</option>`).join('');
+
+$('pData').addEventListener('input', e => {
+  let v = e.target.value.replace(/\D/g,'').slice(0,8);
+  if(v.length>4) v=v.slice(0,2)+'/'+v.slice(2,4)+'/'+v.slice(4);
+  else if(v.length>2) v=v.slice(0,2)+'/'+v.slice(2);
+  e.target.value=v;
+});
+$('pNota').addEventListener('input', e => {
+  let v = e.target.value.replace(/[^\d,]/g,'');
+  if(/^\d{2}$/.test(v) && v!=='10') v=v[0]+','+v[1];
+  e.target.value=v;
+});
+
+function msg(el,txt,ok){ el.textContent=txt; el.className='msg '+(ok?'ok':'no'); }
+function lerPdf(file){
+  return new Promise(res=>{
+    if(!file) return res(null);
+    if(file.size>900*1024) return res({nome:file.name,dados:null});
+    const r=new FileReader(); r.onload=()=>res({nome:file.name,dados:r.result}); r.onerror=()=>res({nome:file.name,dados:null}); r.readAsDataURL(file);
+  });
+}
+$('fProva').onsubmit = async e => {
+  e.preventDefault();
+  const el=$('pMsg'), nome=$('pNome').value.trim().replace(/\s+/g,' '), tipo=$('pTipo').value;
+  const d=$('pData').value, n=$('pNota').value;
+  const m=d.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+  if(!nome||!tipo) return msg(el,'Preencha o nome e o tipo da prova.');
+  if(!m) return msg(el,'Data inválida. Use dd/mm/aaaa.');
+  const dd=+m[1],mm=+m[2],aa=+m[3], dt=new Date(aa,mm-1,dd);
+  if(dt.getFullYear()!==aa||dt.getMonth()!==mm-1||dt.getDate()!==dd) return msg(el,'Essa data não existe.');
+  if(!/^\d{1,2},\d$/.test(n)) return msg(el,'Nota inválida. Use o formato XX,X (ex.: 8,5).');
+  const nota=parseFloat(n.replace(',','.'));
+  if(nota<0||nota>10) return msg(el,'A nota deve estar entre 0,0 e 10,0.');
+  const pdf = await lerPdf($('pPdf').files[0]);
+  provas.push({id:Date.now()+Math.random().toString(36).slice(2,6),nome,tipo,data:`${m[3]}-${m[2]}-${m[1]}`,nota,pdf});
+  salvar(provas);
+  $('fProva').reset();
+  msg(el,'Prova registrada com sucesso!'+(pdf&&!pdf.dados?' (PDF grande demais para guardar: só o nome do arquivo foi salvo.)':''),true);
+  renderAdminLista(); renderTudo();
+};
+
+function renderAdminLista(){
+  const q=norm($('aBusca').value), mapa={};
+  provas.forEach(p=>{ const k=norm(p.nome); (mapa[k]=mapa[k]||{nome:p.nome,itens:[]}).itens.push(p); });
+  const lista=Object.values(mapa).filter(c=>!q||norm(c.nome).includes(q)).sort((a,b)=>a.nome.localeCompare(b.nome,'pt-BR'));
+  $('aLista').innerHTML = lista.length ? lista.map(c=>{
+    c.itens.sort((a,b)=>b.data.localeCompare(a.data));
+    return `<details class="colab"><summary>${esc(c.nome)}<span>${c.itens.length} tentativa${c.itens.length===1?'':'s'}</span></summary>
+    <div class="tw"><table><thead><tr><th>Data</th><th>Tipo de prova</th><th>Nota</th><th>PDF</th><th></th></tr></thead><tbody>
+    ${c.itens.map(p=>`<tr><td>${dataBR(p.data)}</td><td>${esc(p.tipo)}</td><td class="${p.nota>=NOTA_MIN?'ok':'no'}">${fmt(p.nota)}</td>
+      <td>${p.pdf?(p.pdf.dados?`<a href="${p.pdf.dados}" download="${esc(p.pdf.nome)}">${esc(p.pdf.nome)}</a>`:esc(p.pdf.nome)):'–'}</td>
+      <td><button class="x" data-del="${p.id}">remover</button></td></tr>`).join('')}
+    </tbody></table></div></details>`;
+  }).join('') : `<div class="vazio">Nenhum colaborador registrado.</div>`;
+}
+$('aBusca').oninput = renderAdminLista;
+$('aLista').addEventListener('click', e => {
+  const id=e.target.dataset && e.target.dataset.del; if(!id) return;
+  if(e.target.dataset.sure!==id){ e.target.dataset.sure=id; e.target.textContent='clique de novo para confirmar'; return; }
+  provas = provas.filter(p=>p.id!==id); salvar(provas); renderAdminLista(); renderTudo();
+});
+
+/* ---------- dados: exportar/importar ---------- */
+$('bExp').onclick = () => {
+  const sem = provas.map(p=>({...p,pdf:p.pdf?{nome:p.pdf.nome,dados:null}:null}));
+  $('dadosTxt').value = JSON.stringify(sem); $('dadosTxt').select();
+  msg($('dMsg'),'Copie o texto acima (os PDFs não vão junto, só o nome do arquivo).',true);
+};
+$('bImp').onclick = () => {
+  try{
+    const v=JSON.parse($('dadosTxt').value);
+    if(!Array.isArray(v)||v.some(p=>!p.nome||!TIPOS.includes(p.tipo)||!/^\d{4}-\d{2}-\d{2}$/.test(p.data)||typeof p.nota!=='number')) throw 0;
+    provas=v.map(p=>({...p,id:p.id||Date.now()+Math.random().toString(36).slice(2,6)}));
+    salvar(provas); renderTudo(); renderAdminLista(); msg($('dMsg'),'Dados importados.',true);
+  }catch(e){ msg($('dMsg'),'Conteúdo inválido. Cole exatamente o texto exportado.'); }
+};
+
+/* ---------- renderização geral ---------- */
+function renderTudo(){
+  renderInicio(); renderFiltros(); graficoArea(); graficoColuna(); renderLista();
+}
+['cAno','cMes'].forEach(i=>$(i).onchange=graficoColuna);
+['lBusca','lTipo','lAno','lMes'].forEach(i=>{ $(i).oninput=renderLista; $(i).onchange=renderLista; });
+
+renderTudo(); mostrarAdmin();
+</script>
+</body>
+</html>
